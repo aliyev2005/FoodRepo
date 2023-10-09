@@ -12,7 +12,7 @@ namespace FoodProject.Controllers
             _context = context;
         }
         [HttpGet]
-        [TypeFilter(typeof(UserAuthenticationAuth))]
+        [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
         [Route("/api/food")]
         public IActionResult Index()

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace FoodProject.Controllers.Authorization.Filter
 {
-    public class UserAuthenticationAuth: ActionFilterAttribute
+    public class UserAuthFilter: ActionFilterAttribute
     {
         private readonly ApplicationDbContext _context;
-        public UserAuthenticationAuth(ApplicationDbContext context)
+        public UserAuthFilter(ApplicationDbContext context)
         {
             _context = context;
         }
