@@ -6,5 +6,6 @@ namespace FoodProject.Model
     {
         [Required]
         public string Name { get; set; }
+        public string? ImageFileName { get; set; }
     }
 }
