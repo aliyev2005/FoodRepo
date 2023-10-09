@@ -13,5 +13,6 @@ namespace FoodProject.DTO
         [MaxLength(250, ErrorMessage = "Cannot be more than 250")]
         [MinLength(6, ErrorMessage = "Cannot be less than 6")]
         public string Password { get; set; }
+        public bool RememberUser { get; set; } = false;
     }
 }
