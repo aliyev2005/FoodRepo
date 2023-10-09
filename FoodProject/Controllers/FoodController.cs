@@ -1,4 +1,5 @@
-﻿using FoodProject.Data;
+﻿using FoodProject.Controllers.Authorization.Filter;
+using FoodProject.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodProject.Controllers
@@ -11,6 +12,8 @@ namespace FoodProject.Controllers
             _context = context;
         }
         [HttpGet]
+        [TypeFilter(typeof(UserAuthenticationAuth))]
+        [ServiceFilter(typeof(ApiKeyAuthFilter))]
         [Route("/api/food")]
         public IActionResult Index()
         {
