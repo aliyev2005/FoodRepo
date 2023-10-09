@@ -26,7 +26,6 @@ namespace FoodProject.Controllers.Authenitcation
             _context.SaveChanges();
             Response.Cookies.Delete("token");
             return Ok("Logged out");
-            //return RedirectToAction("login", "admin");
         }
     }
 }
