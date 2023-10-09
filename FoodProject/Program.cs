@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<ApiKeyAuthFilter>();
-builder.Services.AddScoped<UserAuthenticationAuth>();
+builder.Services.AddScoped<UserAuthFilter>();
 
 WebApplication? app = builder.Build();
 
