@@ -17,6 +17,7 @@ namespace FoodProject.Model
         [MaxLength(250, ErrorMessage = "Cannot be more than 250")]
         [MinLength(6, ErrorMessage = "Cannot be less than 6")]
         public string Password { get; set; }
+        public string? ProfilePicture { get; set; }
         public string? Token { get; set; }
         public int LoginFails { get; set; } = 0;
     }

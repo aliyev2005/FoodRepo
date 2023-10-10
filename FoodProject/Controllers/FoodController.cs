@@ -11,6 +11,7 @@ namespace FoodProject.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileManager _fileManager;
+        private const string _PATH = "Food";
         public FoodController(ApplicationDbContext context, IFileManager fileManager)
         {
             _context = context;
@@ -34,7 +35,7 @@ namespace FoodProject.Controllers
             Food dataInsert = new();
             #region Data Binding
             dataInsert.Name = request.Name;
-            dataInsert.ImageFileName = Upload(request.ImageFile);
+            dataInsert.ImageFileName = _fileManager.Upload(request.ImageFile, _PATH);//Upload(request.ImageFile);
             #endregion
             if (ModelState.IsValid)
             {
@@ -42,11 +43,6 @@ namespace FoodProject.Controllers
                 _context.SaveChanges();
             }
             return Ok(request);
-        }
-        private string Upload(IFormFile file)
-        {
-            if (file == null) throw new Exception("Cannot upload null file");
-            return _fileManager.Upload(file,"Food");
         }
     }
 }
