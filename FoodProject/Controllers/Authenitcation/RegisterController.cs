@@ -32,7 +32,8 @@ namespace FoodProject.Controllers.Authenitcation
                 {
                     Email = request.Email,
                     Fullname = request.Fullname,
-                    ProfilePicture = _fileManager.Upload(request.ImageFile,_PATH),
+                    PhoneNumber = request.PhoneNumber,
+                    ProfilePicture = (request.ImageFile == null || request.ImageFile.Length == 0) ? "" : _fileManager.Upload(request.ImageFile, _PATH),
                     Password = Crypto.HashPassword(request.Password),  
                 };
                 _context.Users.Add(user);

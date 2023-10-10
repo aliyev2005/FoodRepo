@@ -37,7 +37,7 @@ namespace FoodProject.Controllers
             Food dataInsert = new()
             {
                 Name = request.Name,
-                ImageFileName = _fileManager.Upload(request.ImageFile,_PATH)
+                ImageFileName = (request.ImageFile == null || request.ImageFile.Length == 0) ? "" : _fileManager.Upload(request.ImageFile, _PATH),
             };
             #endregion
             if (ModelState.IsValid)
