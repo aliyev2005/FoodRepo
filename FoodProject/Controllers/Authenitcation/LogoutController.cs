@@ -13,7 +13,6 @@ namespace FoodProject.Controllers.Authenitcation
             _context = context;
         }
 
-        //[TypeFilter(typeof(Auth))]
         [HttpPost]
         [Route("/api/logout")]
         public IActionResult Index()
