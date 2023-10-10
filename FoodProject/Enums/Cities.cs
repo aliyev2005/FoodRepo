@@ -1,25 +1,14 @@
-﻿using System.Runtime.Serialization;
-
-namespace FoodProject.Enums
+﻿namespace FoodProject.Enums
 {
+    //Enums are constants so they are named as such. With all capital letters.
     public enum Cities
     {
-        [EnumMember(Value ="Baku")]
         BAKU,
-        [EnumMember(Value = "Ganja")]
         GANJA,
-        [EnumMember(Value = "Quba")]
         QUBA,
-        [EnumMember(Value = "Shaki")]
         SHAKI,
-        [EnumMember(Value = "Shamaxi")]
         SHAMAXI,
-        [EnumMember(Value = "Qabala")]
         QABALA,
-        /// <summary>
-        /// Lankaran
-        /// </summary>
-        //[EnumMember(Value = "Lankaran")]
         LANKARAN
     }
 }
