@@ -2,3 +2,6 @@ appsettings.json
 /FoodProject/Migrations
 /FoodProject/Uploads
 /.vs
+/FoodProject/bin/
+/FoodProject/obj/
+
