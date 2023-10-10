@@ -17,6 +17,8 @@ namespace FoodProject.DTO
         [MaxLength(250, ErrorMessage = "Cannot be more than 250")]
         [MinLength(6, ErrorMessage = "Cannot be less than 6")]
         public string Password { get; set; }
+        [Phone]
+        public string? PhoneNumber { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
 }
