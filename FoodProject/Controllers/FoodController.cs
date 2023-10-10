@@ -1,6 +1,7 @@
 ﻿using FoodProject.Controllers.Authorization.Filter;
 using FoodProject.Data;
 using FoodProject.DTO;
+using FoodProject.Libraries;
 using FoodProject.Libraries.Repository;
 using FoodProject.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +33,12 @@ namespace FoodProject.Controllers
         [Route("/api/food")]
         public IActionResult AddFood(FoodAddRequest request)
         {
-            Food dataInsert = new();
             #region Data Binding
-            dataInsert.Name = request.Name;
-            dataInsert.ImageFileName = _fileManager.Upload(request.ImageFile, _PATH);//Upload(request.ImageFile);
+            Food dataInsert = new()
+            {
+                Name = request.Name,
+                ImageFileName = _fileManager.Upload(request.ImageFile,_PATH)
+            };
             #endregion
             if (ModelState.IsValid)
             {
