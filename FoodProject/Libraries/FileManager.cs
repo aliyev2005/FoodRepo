@@ -26,10 +26,12 @@ namespace FoodProject.Libraries
             string newName;
             if (fileName == "")
             {
+                //{_ROOT}/{_PATH}/
                 newName = $"{Guid.NewGuid()}.{list[^1]}";
             }
             else
             {
+                //{ _ROOT}/{ _PATH}/
                 newName = $"{fileName}.{list[^1]}";
             }
             var writePath = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH);
@@ -38,7 +40,7 @@ namespace FoodProject.Libraries
             var path = Path.Combine(writePath, newName);
             using var stream = new FileStream(path, FileMode.Create);
             file.CopyTo(stream);
-            return newName;
+            return $"{_ROOT}/{_PATH}/{newName}";
         }
     }
 }

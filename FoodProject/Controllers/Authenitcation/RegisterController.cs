@@ -39,6 +39,7 @@ namespace FoodProject.Controllers.Authenitcation
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return Ok($"{request.Email} account has been succesfully registered.");
+                //return Ok(user);
             }
             return BadRequest("An issue has arised, please contact admin....");
         }
