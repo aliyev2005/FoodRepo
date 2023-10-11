@@ -1,7 +1,6 @@
 ﻿using FoodProject.Controllers.Authorization.Filter;
 using FoodProject.Data;
 using FoodProject.DTO;
-using FoodProject.Libraries;
 using FoodProject.Libraries.Repository;
 using FoodProject.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +30,8 @@ namespace FoodProject.Controllers
         [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
         [Route("/api/food")]
-        public IActionResult AddFood(FoodAddRequest request)
+        
+        public IActionResult AddFood([FromForm]FoodAddRequest request)
         {
             #region Data Binding
             Food dataInsert = new()

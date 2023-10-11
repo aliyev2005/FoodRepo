@@ -20,7 +20,7 @@ namespace FoodProject.Controllers.Authenitcation
 
         [HttpPost]
         [Route("/api/register/")]
-        public IActionResult Index(RegisterRequest request)
+        public IActionResult Index([FromForm]RegisterRequest request)
         {
             if (_context.Users.Any(u => u.Email == request.Email))
             {
@@ -39,7 +39,6 @@ namespace FoodProject.Controllers.Authenitcation
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return Ok($"{request.Email} account has been succesfully registered.");
-                //return Ok(user);
             }
             return BadRequest("An issue has arised, please contact admin....");
         }
