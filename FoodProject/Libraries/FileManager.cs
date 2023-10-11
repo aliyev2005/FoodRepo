@@ -22,23 +22,17 @@ namespace FoodProject.Libraries
 
         string IFileManager.Upload(IFormFile file, string _PATH, string fileName)
         {
-            string[] list = file.FileName.Split('.');
+            string? writePath = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH);
+            Directory.CreateDirectory(writePath);
+
+            string extension = file.FileName.Split('.')[^1];
             string newName;
-            if (fileName == "")
-            {
-                //{_ROOT}/{_PATH}/
-                newName = $"{Guid.NewGuid()}.{list[^1]}";
-            }
-            else
-            {
-                //{ _ROOT}/{ _PATH}/
-                newName = $"{fileName}.{list[^1]}";
-            }
-            var writePath = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH);
-            if (!Directory.Exists(writePath))
-                Directory.CreateDirectory(writePath);
-            var path = Path.Combine(writePath, newName);
-            using var stream = new FileStream(path, FileMode.Create);
+
+            newName = string.IsNullOrEmpty(fileName)
+                ? $"{Guid.NewGuid()}.{extension}"
+                : $"{fileName}.{extension}";
+
+            using FileStream? stream = new(Path.Combine(writePath, newName), FileMode.Create);
             file.CopyTo(stream);
             return $"{_ROOT}/{_PATH}/{newName}";
         }
