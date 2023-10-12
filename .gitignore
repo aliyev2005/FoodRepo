@@ -1,7 +1,9 @@
-appsettings.json
-/FoodProject/Migrations
-/FoodProject/Uploads
+# Folders
 /.vs
 /FoodProject/bin/
 /FoodProject/obj/
+/FoodProject/Uploads
+/FoodProject/Migrations
 
+# Files should be added here
+appsettings.json
