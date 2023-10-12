@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FoodProject.Controllers
 {
+    [Route("/api/food")]
     public class FoodController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,9 +19,6 @@ namespace FoodProject.Controllers
             _fileManager = fileManager;
         }
         [HttpGet]
-        [TypeFilter(typeof(UserAuthFilter))]
-        [ServiceFilter(typeof(ApiKeyAuthFilter))]
-        [Route("/api/food")]
         public IActionResult GetAll()
         {
             var food = _context.Foods.ToList();
@@ -30,7 +28,6 @@ namespace FoodProject.Controllers
         [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
         [Route("/api/food")]
-        
         public IActionResult AddFood([FromForm]FoodAddRequest request)
         {
             #region Data Binding
@@ -46,6 +43,18 @@ namespace FoodProject.Controllers
                 _context.SaveChanges();
             }
             return Ok(request);
+        }
+        [HttpDelete]
+        [TypeFilter(typeof(UserAuthFilter))]
+        [ServiceFilter(typeof(ApiKeyAuthFilter))]
+        [Route("/api/food")]
+        public IActionResult DeleteFood(Guid id)
+        {
+            Food? food = _context.Foods.Find(id);
+            _fileManager.Delete(food.ImageFileName);
+            _context.Foods.Remove(food);
+            _context.SaveChanges();
+            return Ok($"{id} - Deleted successfully");
         }
     }
 }
