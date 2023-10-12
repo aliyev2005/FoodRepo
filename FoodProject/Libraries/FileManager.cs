@@ -6,12 +6,12 @@ namespace FoodProject.Libraries
     {
         private const string _ROOT = "Uploads";
 
-        void IFileManager.Delete(string fileName, string _PATH)
+        void IFileManager.Delete(string fileName)
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH, fileName);
-            if (File.Exists(path))
+            //string path = Path.GetFileName(fileName);
+            if (File.Exists(fileName))
             {
-                File.Delete(path);
+                File.Delete(fileName);
             }
         }
 
@@ -26,7 +26,7 @@ namespace FoodProject.Libraries
             Directory.CreateDirectory(writePath);
 
             string extension = file.FileName.Split('.').Last();
-            string newName = $"{Guid.NewGuid}.{extension}";
+            string newName = $"{Guid.NewGuid()}.{extension}";
 
             using FileStream stream = new(Path.Combine(writePath, newName), FileMode.Create);
             file.CopyTo(stream);
