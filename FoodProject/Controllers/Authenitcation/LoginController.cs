@@ -22,10 +22,10 @@ namespace FoodProject.Controllers.Authenitcation
             if (ModelState.IsValid)
             {
                 User user = _context.Users.FirstOrDefault(u => u.Email == request.Email);
-                if (user != null && Crypto.VerifyHashedPassword(user.Password, request.Password) && user.LoginFails < 3)
+                if (user != null && Crypto.VerifyHashedPassword(user.Password, request.Password) /*&& user.LoginFails < 3*/)
                 {
                     user.Token = Guid.NewGuid().ToString();
-                    user.LoginFails = 0;
+                    //user.LoginFails = 0;
                     _context.SaveChanges();
                     Response.Cookies.Append("token", user.Token, new CookieOptions
                     {
@@ -34,12 +34,12 @@ namespace FoodProject.Controllers.Authenitcation
                     });
                     return Ok($"Login succesful - {request.Email}");
                 }
-                if (user.LoginFails >= 3)
-                {
-                    ModelState.AddModelError("Password", $"Account locked due to {user.LoginFails} failed login attemps. Please contact administrator.");
-                }
+                //if (user.LoginFails >= 3)
+                //{
+                //    ModelState.AddModelError("Password", $"Account locked due to {user.LoginFails} failed login attemps. Please contact administrator.");
+                //}
                 ModelState.AddModelError("Password", "Email or Password Is Incorrect. Check the details.");
-                user.LoginFails++;
+                //user.LoginFails++;
                 _context.SaveChanges();
             }
             return BadRequest("An issue has arised, please contact admin....");

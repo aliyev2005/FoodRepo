@@ -21,6 +21,6 @@ namespace FoodProject.Model
         public string? PhoneNumber { get; set; }
         public string? ProfilePicture { get; set; }
         public string? Token { get; set; }
-        public int LoginFails { get; set; } = 0;
+        //public int LoginFails { get; set; } = 0;
     }
 }
