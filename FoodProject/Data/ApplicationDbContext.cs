@@ -12,5 +12,6 @@ namespace FoodProject.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Food> Foods { get; set; }
         public DbSet<UserAdress> Adresses { get; set; }
+        public DbSet<Blacklist> Blacklist { get; set; }
     }
 }
