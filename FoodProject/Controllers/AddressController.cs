@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace FoodProject.Controllers
 {
+    [Route("/api/address")]
     public class AddressController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,7 +17,6 @@ namespace FoodProject.Controllers
         }
         [HttpGet]
         [TypeFilter(typeof(UserAuthFilter))]
-        [Route("/api/address")]
         public IActionResult GetUserAddresses()
         {
             var data = _context.Adresses.
@@ -27,6 +27,7 @@ namespace FoodProject.Controllers
                 {
                     City = d.City,
                     Street = d.Street,
+                    Name = d.Name,
                 }).ToList();
             if (data.IsNullOrEmpty())
             {
@@ -36,11 +37,11 @@ namespace FoodProject.Controllers
         }
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
-        [Route("/api/address")]
         public IActionResult AddAddress(AddressRequest request)
         {
             UserAdress address = new()
             {
+                Name = request.Name,
                 City = request.City,
                 Street = request.Street,
                 UserId = ReturnUserData().Id,
