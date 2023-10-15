@@ -13,13 +13,11 @@ namespace FoodProject.Controllers.Authenitcation
             _context = context;
         }
 
-        //[TypeFilter(typeof(Auth))]
         [HttpPost]
         [Route("/api/logout")]
         public IActionResult Index()
         {
-            User _user = RouteData.Values["loggedUser"] as User;
-            if (_user != null)
+            if (RouteData.Values["loggedUser"] is User _user)
             {
                 _user.Token = null;
             }

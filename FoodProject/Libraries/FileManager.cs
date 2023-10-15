@@ -6,12 +6,12 @@ namespace FoodProject.Libraries
     {
         private const string _ROOT = "Uploads";
 
-        void IFileManager.Delete(string fileName, string _PATH)
+        void IFileManager.Delete(string fileName)
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH, fileName);
-            if (File.Exists(path))
+            //string path = Path.GetFileName(fileName);
+            if (File.Exists(fileName))
             {
-                File.Delete(path);
+                File.Delete(fileName);
             }
         }
 
@@ -20,25 +20,17 @@ namespace FoodProject.Libraries
             return File.Exists(Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH, fileName));
         }
 
-        string IFileManager.Upload(IFormFile file, string _PATH, string fileName)
+        string IFileManager.Upload(IFormFile file, string _PATH)
         {
-            string[] list = file.FileName.Split('.');
-            string newName;
-            if (fileName == "")
-            {
-                newName = $"{Guid.NewGuid()}.{list[^1]}";
-            }
-            else
-            {
-                newName = $"{fileName}.{list[^1]}";
-            }
-            var writePath = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH);
-            if (!Directory.Exists(writePath))
-                Directory.CreateDirectory(writePath);
-            var path = Path.Combine(writePath, newName);
-            using var stream = new FileStream(path, FileMode.Create);
+            string writePath = Path.Combine(Directory.GetCurrentDirectory(), _ROOT, _PATH);
+            Directory.CreateDirectory(writePath);
+
+            string extension = file.FileName.Split('.').Last();
+            string newName = $"{Guid.NewGuid()}.{extension}";
+
+            using FileStream stream = new(Path.Combine(writePath, newName), FileMode.Create);
             file.CopyTo(stream);
-            return newName;
+            return $"{_ROOT}/{_PATH}/{newName}";
         }
     }
 }

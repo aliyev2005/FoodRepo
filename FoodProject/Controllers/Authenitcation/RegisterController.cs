@@ -1,6 +1,7 @@
 ﻿using CryptoHelper;
 using FoodProject.Data;
 using FoodProject.DTO;
+using FoodProject.Libraries.Repository;
 using FoodProject.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +10,17 @@ namespace FoodProject.Controllers.Authenitcation
     public class RegisterController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public RegisterController(ApplicationDbContext context)
+        private readonly IFileManager _fileManager;
+        private const string _PATH = "User";
+        public RegisterController(ApplicationDbContext context, IFileManager fileManager)
         {
             _context = context;   
+            _fileManager = fileManager;
         }
 
         [HttpPost]
         [Route("/api/register/")]
-        public IActionResult Index(RegisterRequest request)
+        public IActionResult Index([FromForm]RegisterRequest request)
         {
             if (_context.Users.Any(u => u.Email == request.Email))
             {
@@ -28,6 +32,8 @@ namespace FoodProject.Controllers.Authenitcation
                 {
                     Email = request.Email,
                     Fullname = request.Fullname,
+                    PhoneNumber = request.PhoneNumber,
+                    ProfilePicture = (request.ImageFile == null || request.ImageFile.Length == 0) ? "" : _fileManager.Upload(request.ImageFile, _PATH),
                     Password = Crypto.HashPassword(request.Password),  
                 };
                 _context.Users.Add(user);
