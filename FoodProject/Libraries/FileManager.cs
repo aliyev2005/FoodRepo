@@ -8,7 +8,6 @@ namespace FoodProject.Libraries
 
         void IFileManager.Delete(string fileName)
         {
-            //string path = Path.GetFileName(fileName);
             if (File.Exists(fileName))
             {
                 File.Delete(fileName);

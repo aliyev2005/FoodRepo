@@ -1,5 +1,6 @@
-USE FoodAppDb
 
+
+-- Obsolete
 INSERT INTO Foods (Id, Name) VALUES
     ('8DDE15D3-FD83-4B84-94A6-6C56A96F2B13', 'Apple'),
     ('E2E45EAB-8D0A-4B3A-98A4-6853E834D05A', 'Banana'),
@@ -17,10 +18,13 @@ INSERT INTO Foods (Id, Name) VALUES
     ('BD6C4371-5AB8-452A-8A16-3B605E9A0A3D', 'Burger'),
     ('F8C98C07-8B87-4E76-82CC-816662B9BCAC', 'Sushi');
 
+--Delete Commands
 Use FoodAppDb
 DELETE FROM Users
 DELETE FROM Foods
+DELETE FROM Adresses
 
+--Drop entire database
 USE master;
 ALTER DATABASE [FoodAppDb] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 DROP DATABASE [FoodAppDb] ;

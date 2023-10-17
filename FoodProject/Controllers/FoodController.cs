@@ -27,7 +27,6 @@ namespace FoodProject.Controllers
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
-        [Route("/api/food")]
         public IActionResult AddFood([FromForm]FoodAddRequest request)
         {
             #region Data Binding
@@ -47,7 +46,6 @@ namespace FoodProject.Controllers
         [HttpDelete]
         [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
-        [Route("/api/food")]
         public IActionResult DeleteFood(Guid id)
         {
             Food? food = _context.Foods.Find(id);
