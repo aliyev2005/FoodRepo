@@ -22,5 +22,8 @@ namespace FoodProject.Model
         public string? ProfilePicture { get; set; }
         public string? Token { get; set; }
         //public int LoginFails { get; set; } = 0;
+
+        // Relation with Reviews
+        public List<Review> Reviews { get; set; }
     }
 }
