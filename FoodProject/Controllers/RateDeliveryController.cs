@@ -25,7 +25,7 @@ namespace FoodProject.Controllers
         [TypeFilter(typeof(UserAuthFilter))]
         public IActionResult GetGeneralInfo()
         {
-            RateDeliveryRequest request = new RateDeliveryRequest();
+            DeliveryInfoRequest request = new DeliveryInfoRequest();
             request.Store = _context.Stores.FirstOrDefault();
             if (_context.Reviews.Count() == 0)
             {
@@ -37,7 +37,7 @@ namespace FoodProject.Controllers
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
         [Route("/Rate")]
-        public IActionResult RateAndReview([FromForm] ReviewRequest request)
+        public IActionResult RateAndReview([FromForm] RateAndReviewRequest request)
         {
             if (request.Rating == null || request.Rating < 1 || request.Rating > 5)
             {
@@ -55,7 +55,6 @@ namespace FoodProject.Controllers
             _context.SaveChanges();
 
             return Ok("Review and Rating submitted successfully");
-        }
-        
+        }       
     }
 }
