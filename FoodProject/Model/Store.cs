@@ -1,6 +1,6 @@
 ﻿namespace FoodProject.Model
 {
-    public class Store
+    public class Store:BaseModel
     {
         public string Name { get; set; }
         public string Address { get; set; }
