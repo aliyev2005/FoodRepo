@@ -27,42 +27,35 @@ namespace FoodProject.Controllers
         {
             RateDeliveryRequest request = new RateDeliveryRequest();
             request.Store = _context.Stores.FirstOrDefault();
-            if (_context.Deliveries.Count() == 0)
+            if (_context.Reviews.Count() == 0)
             {
                 return Ok("No ratings yet");
             }
-            request.GeneralRating = _context.Deliveries.ToList().Average(d => d.Rating);
+            request.GeneralRating = _context.Reviews.ToList().Average(d => d.Rating);
             return Ok(request);
         }
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
         [Route("/Rate")]
-        public IActionResult RateDelivery([FromForm] double rating)
+        public IActionResult RateAndReview([FromForm] ReviewRequest request)
         {
-            if(rating == null || rating < 1 || rating > 5)
+            if (request.Rating == null || request.Rating < 1 || request.Rating > 5)
             {
                 return BadRequest("Invalid Rating Value. Ratings should be between 1 and 5.");
             }
-            Delivery delivery = new Delivery()
-            { 
-                Rating = rating
+            Review review = new Review()
+            {
+                Rating = request.Rating,
+                Title = request.Title,
+                AddedDate = DateTime.Now,
+                UserId = _user.Id
             };
-            _context.Deliveries.Add(delivery);
-            _context.SaveChanges();
-            return Ok("Rating submitted successfully");
-        }
-        
-        [TypeFilter(typeof(UserAuthFilter))]
-        [HttpPost]
-        [Route("/Review")]
-        public IActionResult CreateReview([FromForm]Review review)
-        {
-            review.AddedDate = DateTime.Now;
-            review.UserId = _user.Id;
 
             _context.Reviews.Add(review);
             _context.SaveChanges();
-            return Ok(review);
+
+            return Ok("Review and Rating submitted successfully");
         }
+        
     }
 }

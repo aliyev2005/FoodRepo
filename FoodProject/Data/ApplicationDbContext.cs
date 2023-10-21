@@ -22,6 +22,5 @@ namespace FoodProject.Data
         public DbSet<Blacklist> Blacklist { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Store> Stores { get; set; }
-        public DbSet<Delivery> Deliveries { get; set; }
     }
 }

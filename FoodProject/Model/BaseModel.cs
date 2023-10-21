@@ -4,7 +4,7 @@ namespace FoodProject.Model
 {
     public class BaseModel
     {
-        [Required]
+        [Key]
         public Guid Id { get; set; }
     }
 }
