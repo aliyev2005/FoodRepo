@@ -2,9 +2,9 @@
 
 namespace FoodProject.DTO
 {
-    public class RateDeliveryRequest
+    public class DeliveryInfoRequest
     {
         public Store Store { get; set; }
-        public Order Order { get; set; }
+        public double GeneralRating { get; set; }
     }
 }

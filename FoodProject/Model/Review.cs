@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FoodProject.Model
 {
@@ -8,5 +9,6 @@ namespace FoodProject.Model
         public string Title { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
+        public double Rating { get; set; }
     }
 }
