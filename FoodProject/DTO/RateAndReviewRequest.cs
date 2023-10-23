@@ -4,5 +4,6 @@
     {
         public string Title { get; set; }
         public double Rating { get; set; }
+        public Guid StoreId { get; set; }
     }
 }

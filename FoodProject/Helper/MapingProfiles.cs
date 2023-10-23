@@ -9,6 +9,7 @@ namespace FoodProject.Helper
         public MapingProfiles()
         {
             CreateMap<User, ProfileRequest>();
+            CreateMap<Order, GetOrderRequest>();
         }
     }
 }

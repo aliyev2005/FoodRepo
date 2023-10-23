@@ -6,9 +6,11 @@ namespace FoodProject.Model
     public class Review:BaseModel
     {
         public DateTime AddedDate { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
         public double Rating { get; set; }
+        public Guid StoreId { get; set; }
+        public Store Store { get; set; }
     }
 }

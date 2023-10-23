@@ -15,6 +15,10 @@ namespace FoodProject.Data
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
                 .HasForeignKey(r => r.UserId);
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Store)
+                .WithMany(u => u.Reviews)
+                .HasForeignKey(r => r.StoreId);
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Food> Foods { get; set; }
@@ -22,5 +26,6 @@ namespace FoodProject.Data
         public DbSet<Blacklist> Blacklist { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Store> Stores { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

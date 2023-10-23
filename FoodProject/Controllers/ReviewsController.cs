@@ -24,6 +24,10 @@ namespace FoodProject.Controllers
         [TypeFilter(typeof(UserAuthFilter))]
         public IActionResult GetAllReviews()
         {
+            if(!_context.Reviews.Any())
+            {
+                return  Ok("No reviews yet");
+            }
             var reviews = _context.Reviews.Select(
                 c => new
                 {
@@ -33,6 +37,7 @@ namespace FoodProject.Controllers
                     c.AddedDate,
                     c.User.Fullname,
                     c.UserId,
+                    c.StoreId
                 }                
                 ).OrderByDescending(r => r.AddedDate).ToList();
             return Ok(reviews);

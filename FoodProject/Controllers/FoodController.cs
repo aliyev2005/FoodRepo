@@ -21,8 +21,8 @@ namespace FoodProject.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var food = _context.Foods.ToList();
-            return Ok(food);
+            var foods = _context.Foods.ToList();
+            return Ok(foods);
         }
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
@@ -35,6 +35,8 @@ namespace FoodProject.Controllers
             {
                 Name = request.Name,
                 ImageFileName = (request.ImageFile == null || request.ImageFile.Length == 0) ? "" : _fileManager.Upload(request.ImageFile, _PATH),
+                Price = request.Price,
+                StoreId = request.StoreId,
             };
             #endregion
             if (ModelState.IsValid)
@@ -42,7 +44,7 @@ namespace FoodProject.Controllers
                 _context.Add(dataInsert);
                 _context.SaveChanges();
             }
-            return Ok(request);
+            return Ok($"{request} is added successfully");
         }
         [HttpDelete]
         [TypeFilter(typeof(UserAuthFilter))]

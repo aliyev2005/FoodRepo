@@ -23,15 +23,15 @@ namespace FoodProject.Controllers
         }
         [HttpGet]
         [TypeFilter(typeof(UserAuthFilter))]
-        public IActionResult GetGeneralInfo()
+        public IActionResult GetGeneralInfo(Guid id)
         {
             DeliveryInfoRequest request = new DeliveryInfoRequest();
-            request.Store = _context.Stores.FirstOrDefault();
+            request.Store = _context.Stores.FirstOrDefault(a => a.Id == id);
             if (_context.Reviews.Count() == 0)
             {
                 return Ok("No ratings yet");
             }
-            request.GeneralRating = _context.Reviews.ToList().Average(d => d.Rating);
+            request.GeneralRating = _context.Reviews.Select(c => new {c.Rating}).Average(d => d.Rating);
             return Ok(request);
         }
         [HttpPost]
@@ -48,7 +48,8 @@ namespace FoodProject.Controllers
                 Rating = request.Rating,
                 Title = request.Title,
                 AddedDate = DateTime.Now,
-                UserId = _user.Id
+                UserId = _user.Id,
+                StoreId = request.StoreId,
             };
 
             _context.Reviews.Add(review);

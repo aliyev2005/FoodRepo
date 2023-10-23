@@ -7,5 +7,7 @@ namespace FoodProject.DTO
         [Required]
         public string Name { get; set; }
         public IFormFile? ImageFile { get; set; }
+        public Guid StoreId { get; set; }
+        public double Price { get; set; }
     }
 }
