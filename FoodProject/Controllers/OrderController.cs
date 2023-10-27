@@ -3,8 +3,15 @@ using FoodProject.Controllers.Authorization.Filter;
 using FoodProject.Data;
 using FoodProject.DTO;
 using FoodProject.Model;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using Microsoft.VisualBasic;
 using System.Reflection.Metadata.Ecma335;
 
 namespace FoodProject.Controllers
@@ -23,16 +30,60 @@ namespace FoodProject.Controllers
         }
         [HttpGet]
         [TypeFilter(typeof(UserAuthFilter))]
+        [Route("UpcomingOrders")]
         public IActionResult GetUpcomingOrders()
-        {        
-            var orders = _mapper.Map<List<GetOrderRequest>>(_context.Orders.Where(o => o.IsDelivered == false).Where(o => o.UserId == _user.Id).ToList());                      
+        {           
+            var orders = _context.Orders
+                .Where(o => o.UserId == _user.Id)
+                .Where(o => o.EstimatedArrival >= DateTime.Now)
+                .Select(o => new {
+                    o.Id,
+                    Food = new {o.Food.Name, o.Food.Id},
+                    Store = new {o.Store.Id,o.Store.Name},
+                    User = new
+                    {                        
+                        o.UserId,
+                        o.User.Fullname,
+                        o.User.Email,
+                    },
+                    o.EstimatedArrival,
+                    IsDelivered = false,
+                    o.Status,
+                    o.FoodQuantity,
+                    o.TotalPrice,
+                })
+                .ToList();
+
             return Ok(orders);
         }
-        //private int GetEstimatedArrival(int settedTime = 30, DateTime startTime)
-        //{
-        //    DateTime currentTime = DateTime.Now;
-        //    var elapsedTime = TimeSpan.FromMinutes();
-        //}
+        [HttpGet]
+        [TypeFilter(typeof(UserAuthFilter))]
+        [Route("OrderHistory")]
+        public IActionResult GetOrdersHistory()
+        {
+            var orders = _context.Orders
+                .Where(o => o.EstimatedArrival <= DateTime.Now)
+                .Where(o => o.UserId == _user.Id)
+                .Select(o => new {
+                    o.Id,
+                    Store = new {
+                        o.Storeid,
+                        o.Store.Name
+                    },
+                    User = new { 
+                        o.UserId, 
+                        o.User.Fullname,
+                        o.User.Email 
+                    },
+                    o.FoodQuantity,
+                    o.TotalPrice,
+                    o.Food.Name,
+                    IsDelivered = true,
+                }).ToList();
+            
+            return Ok(orders);
+        }
+
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
         public IActionResult AddOrder([FromForm] AddOrderRequest request)
@@ -40,24 +91,37 @@ namespace FoodProject.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(request);
-            }            
+            }
+            var food = _context.Foods.Where(f => f.Id == request.FoodId).FirstOrDefault();
+
             Order order = new Order()
             {
                 UserId = _user.Id,
                 Food = _context.Foods.Where(f => f.Id == request.FoodId).FirstOrDefault(),
                 Storeid = _context.Foods.Where(f => f.Id == request.FoodId).FirstOrDefault().StoreId,
-                IsDelivered = false,
                 OrderTime = DateTime.Now,
-                EstimatedArrival = DateTime.Now.AddHours(2),
-                Status = "Pending"
+                EstimatedArrival = DateTime.Now.AddHours(1),
+                Status = "Pending",
+                FoodQuantity = request.Quantity,
+                TotalPrice = food.Price * request.Quantity,
             };
-            var totalPrice = order.Food.Price * order.FoodQuantity;
-            order.TotalPrice = totalPrice;
 
             _context.Orders.Add(order);
             _context.SaveChanges();
 
             return Ok("Order added successfully");
+        }
+        [HttpDelete]
+        [TypeFilter(typeof(UserAuthFilter))]
+        [Route("DeleteOrder")]
+        public IActionResult DeleteOrder(Guid id)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == id);
+           
+            _context.Orders.Remove(order);  
+            _context.SaveChanges();
+            
+            return Ok("Order deleted successfully");
         }
     }
 }
