@@ -6,6 +6,7 @@ using FoodProject.Model;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -21,40 +22,42 @@ namespace FoodProject.Controllers
     public class OrderController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
         private User _user => RouteData.Values["loggedUser"] as User;
-        public OrderController(ApplicationDbContext context, IMapper mapper)
+        public OrderController(ApplicationDbContext context)
         {
             _context = context;  
-            _mapper = mapper;
         }
         [HttpGet]
         [TypeFilter(typeof(UserAuthFilter))]
         [Route("UpcomingOrders")]
         public IActionResult GetUpcomingOrders()
-        {           
-            var orders = _context.Orders
-                .Where(o => o.UserId == _user.Id)
-                .Where(o => o.EstimatedArrival >= DateTime.Now)
-                .Select(o => new {
-                    o.Id,
-                    Food = new {o.Food.Name, o.Food.Id},
-                    Store = new {o.Store.Id,o.Store.Name},
+        {
+            var ordersWithElapsedTime = _context.Orders
+            .Where(o => o.UserId == _user.Id)
+            .Where(o => o.EstimatedArrival >= DateTime.Now)
+            .Select(o => new {
+                Order = new
+                {
+                    Id = o.Id,
+                    Food = new { o.Food.Name, o.Food.Id },
+                    Store = new { o.Store.Id, o.Store.Name },
                     User = new
-                    {                        
-                        o.UserId,
-                        o.User.Fullname,
-                        o.User.Email,
+                    {
+                       o.UserId,
+                       o.User.Fullname,
+                       o.User.Email,
                     },
                     o.EstimatedArrival,
                     IsDelivered = false,
                     o.Status,
                     o.FoodQuantity,
-                    o.TotalPrice,
-                })
-                .ToList();
+                     o.TotalPrice,
+                },
+                ElapsedTime = o.EstimatedArrival - DateTime.Now
+            })
+            .ToList();
 
-            return Ok(orders);
+            return Ok(ordersWithElapsedTime);
         }
         [HttpGet]
         [TypeFilter(typeof(UserAuthFilter))]
@@ -79,11 +82,11 @@ namespace FoodProject.Controllers
                     o.TotalPrice,
                     o.Food.Name,
                     IsDelivered = true,
+                    o.OrderTime
                 }).ToList();
-            
+
             return Ok(orders);
         }
-
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
         public IActionResult AddOrder([FromForm] AddOrderRequest request)

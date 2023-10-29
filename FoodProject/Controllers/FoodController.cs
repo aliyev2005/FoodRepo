@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FoodProject.Controllers
 {
-    [Route("/api/food")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class FoodController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +20,7 @@ namespace FoodProject.Controllers
             _fileManager = fileManager;
         }
         [HttpGet]
+        [Route("Foods")]
         public IActionResult GetAll()
         {
             var foods = _context.Foods.ToList();
@@ -27,7 +29,7 @@ namespace FoodProject.Controllers
         [HttpPost]
         [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
-        [Route("/api/food")]
+        [Route("AddFood")]
         public IActionResult AddFood([FromForm]FoodAddRequest request)
         {
             #region Data Binding
@@ -44,12 +46,12 @@ namespace FoodProject.Controllers
                 _context.Add(dataInsert);
                 _context.SaveChanges();
             }
-            return Ok($"{request} is added successfully");
+            return Ok($"{dataInsert.Id} is added successfully");
         }
         [HttpDelete]
         [TypeFilter(typeof(UserAuthFilter))]
         [ServiceFilter(typeof(ApiKeyAuthFilter))]
-        [Route("/api/food")]
+        [Route("DeleteFood")]
         public IActionResult DeleteFood(Guid id)
         {
             Food? food = _context.Foods.Find(id);
@@ -57,6 +59,29 @@ namespace FoodProject.Controllers
             _context.Foods.Remove(food);
             _context.SaveChanges();
             return Ok($"{id} - Deleted successfully");
+        }
+        [HttpPost]
+        [TypeFilter(typeof(UserAuthFilter))]
+        [Route("ToggleFavorite/{id}")]
+        public IActionResult ToggleFavorite(Guid id)
+        {
+            var food = _context.Foods.FirstOrDefault(f => f.Id == id);
+            if (food == null)
+                return NotFound();
+
+            food.IsFavorited = true;
+            _context.Foods.Update(food);
+            _context.SaveChanges();
+
+            return Ok("Food added to favorites");
+        }
+        [HttpGet]
+        [TypeFilter(typeof(UserAuthFilter))]
+        [Route("Favourites")]
+        public IActionResult GetFavoriteFoods()
+        {
+            var favorites = _context.Foods.Where(f => f.IsFavorited == true).ToList();
+            return Ok(favorites);
         }
     }
 }
