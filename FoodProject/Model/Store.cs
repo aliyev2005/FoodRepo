@@ -9,5 +9,6 @@
         public List<Review> Reviews { get; set; }
         public List<Order> Orders { get; set; }
         public List<Food> Foods { get; set; }
+        public bool IsFavorited { get; set; }
     }
 }

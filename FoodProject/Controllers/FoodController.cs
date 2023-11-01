@@ -83,5 +83,6 @@ namespace FoodProject.Controllers
             var favorites = _context.Foods.Where(f => f.IsFavorited == true).ToList();
             return Ok(favorites);
         }
+        
     }
 }
