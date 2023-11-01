@@ -59,30 +59,6 @@ namespace FoodProject.Controllers
             _context.Foods.Remove(food);
             _context.SaveChanges();
             return Ok($"{id} - Deleted successfully");
-        }
-        [HttpPost]
-        [TypeFilter(typeof(UserAuthFilter))]
-        [Route("ToggleFavorite/{id}")]
-        public IActionResult ToggleFavorite(Guid id)
-        {
-            var food = _context.Foods.FirstOrDefault(f => f.Id == id);
-            if (food == null)
-                return NotFound();
-
-            food.IsFavorited = true;
-            _context.Foods.Update(food);
-            _context.SaveChanges();
-
-            return Ok("Food added to favorites");
-        }
-        [HttpGet]
-        [TypeFilter(typeof(UserAuthFilter))]
-        [Route("Favourites")]
-        public IActionResult GetFavoriteFoods()
-        {
-            var favorites = _context.Foods.Where(f => f.IsFavorited == true).ToList();
-            return Ok(favorites);
-        }
-        
+        }          
     }
 }
